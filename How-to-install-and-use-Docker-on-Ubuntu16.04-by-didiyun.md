@@ -636,6 +636,8 @@ latest: digest: sha256:6f4aafc0500bc7065c11ba5aa7b0cf72f356a4121827867d7ab06632a
 ```
 
 将镜像推送到注册服务器后，它应该列在您帐户的仪表板上，如下图所示。
+![替代文字](https://github.com/luneyuyu/usedocker/blob/master/dockerhub-repositiry.png"标题文字")
+dockerhub-repositiry.png
 
 如果推送尝试导致以下此类错误，那么您可能没有登录：
 
