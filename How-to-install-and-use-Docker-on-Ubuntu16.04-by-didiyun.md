@@ -1,54 +1,56 @@
-# 如何用滴滴云在Ubuntu 16.04上安装和使用Docker
+# 基于滴滴云安装Docker并推送镜像到滴滴云Docker仓库
 
 ## 前言
 
 Docker是一个应用程序，它简化了容器中应用程序进程的管理过程。容器允许您在资源隔离的进程中运行应用程序。容器与虚拟机类似，但容器更便携、更资源友好，并且更依赖于主机操作系统。
 
-本文将介绍，如何用滴滴云服务器在Ubuntu 16.04上安装和使用Docker Community Edition（CE）。我们将安装Docker、使用镜像和容器，并将镜像推送到Docker仓库。
+本文将介绍，如何用滴滴云服务器在Ubuntu 16.04上安装和使用Docker Community Edition（CE），我们将安装Docker、使用镜像和容器，并将镜像推送到Docker仓库。目前，滴滴云提供了容器镜像服务，支持镜像托管、镜像安全扫描、镜像加速等功能，我们还将推送镜像到滴滴云Docker仓库。
 
 ## 准备
 
 在开始之前，我们需要做以下准备工作:
 
-* 一个滴滴云服务器，配置为：Ubuntu 16.04，4核8G内存，40G SSD云盘存储，5Mbps带宽，包括非root权限的用户和防火墙。
+* 登录[滴滴云控制台](https://app.didiyun.com/#/dc2/add)创建一个云服务器dc2，配置为：Ubuntu 16.04，4核8G内存，40G SSD云盘存储，5Mbps带宽。
 
 * 如果您希望创建自己的镜像并将其推送到Docker Hub，则需要Docker Hub的帐户，如步骤7和8所示。
+
+* 跳转到[滴滴云控制台-计算-容器镜像服务](https://app.didiyun.com/#/docker/repositories)设置仓库账户，如步骤9所示。
 
 ## 第1步 - 安装Docker
 
 为了确保获得最新版本，我们将从Docker官库镜像仓库来安装Docker。为此，我们将添加一个新的软件包源，从Docker添加GPG密钥以确保下载有效，然后安装该软件包。
 
-1. 更新现有的软件包列表:
+更新现有的软件包列表:
 
 ```
 $ sudo apt update
 ```
 
-2. 安装apt-transport-https等软件包支持http协议的源:
+安装apt-transport-https等软件包支持http协议的源:
 
 ```
 $ sudo apt install apt-transport-https ca-certificates curl software-properties-common
 ```
 
-3. 添加Docker官方的gpg密钥到您的系统:
+添加Docker官方的gpg密钥到您的系统:
 
 ```
 $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ```
 
-4. 将Docker添加到apt源:
+将Docker添加到apt源:
 
 ```
 $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
 ```
 
-5. 再次更新apt软件包缓存:
+再次更新apt软件包缓存:
 
 ```
 $ sudo apt update
 ```
 
-6. 确保您要从Docker仓库而不是默认的Ubuntu仓库安装:
+确保您要从Docker仓库而不是默认的Ubuntu仓库安装:
 
 ```
 $ apt-cache policy docker-ce
@@ -99,13 +101,13 @@ docker-ce:
 
 请注意，`docker-ce`未安装，但安装候选项来自Ubuntu16.04（`xenial`）的Docker仓库。
 
-7. 安装Docker CE:
+安装Docker CE:
 
 ```
 $ sudo apt install docker-ce
 ```
 
-8. 此时，Docker安装已完成，守护进程已启动。通过`systemctl`命令来启动Docker服务，检查它是否正在运行:
+此时，Docker安装已完成，守护进程已启动。通过`systemctl`命令来启动Docker服务，检查它是否正在运行:
 
 ```
 $ sudo systemctl status docker
@@ -284,8 +286,6 @@ $ docker info
 
 下面让我们探讨其中的一些命令，从使用镜像开始。
 
-接下来让我们探讨docker命令。
-
 ## 第4步 - 使用Docker镜像
 
 Docker容器是用Docker镜像创建的。默认情况下，Docker会尝试从默认镜像仓库（Docker Hub公共注册服务器中的仓库）获取这些镜像。Docker Hub是Docker项目背后的公司，任何人都可以在Docker Hub上托管他们的Docker镜像，您需要的大多数应用程序和Linux发行版都会有镜像托管在那里。
@@ -378,6 +378,7 @@ $ docker pull ubuntu
 ```
 
 您将看到以下输出:
+
 ```
 Output
 
@@ -601,6 +602,12 @@ hello-world          latest              4ab4c602aa5e        3 months ago       
 $ docker login -u docker-registry-username
 ```
 
+示例(接下来的操作指令均基于该示例，您根据实际情况替换内容即可)：
+
+```
+$ docker login -u docker-registry-huyuyu
+```
+
 系统将提示您使用Docker Hub密码进行身份验证。如果您输入了正确的密码，则身份验证成功。
 
 注意：如果Docker注册服务器用户名与用于创建镜像的本地用户名不同，则必须使用注册服务器用户名来标记镜像。基于上一步中给出的示例，您可以键入:
@@ -655,6 +662,12 @@ unauthorized: authentication required
 登录`docker login`并重复推送尝试。然后验证它是否存在于Docker Hub仓库页面上。
 
 您现在可以将该镜像拉到新计算机并使用它来运行新容器`docker pull huyuyu/ubuntu-nodejs` 。
+
+## 第9步 - 推送镜像到滴滴云Docker仓库
+
+滴滴云容器镜像服务是面向企业和开发者提供的容器镜像生命周期管理服务。容器镜像服务简化了镜像仓库的搭建运维工作，支持镜像托管、镜像安全扫描、镜像加速等功能，提供海量镜像资源，满足不同业务的需求。
+
+我们将使用滴滴云容器镜像服务创建自己的命名空间，再用上一步的方法推送镜像到
 
 ## 结论
 
