@@ -20,37 +20,37 @@ Docker是一个应用程序，它简化了容器中应用程序进程的管理�
 
 为了确保获得最新版本，我们将从Docker官库镜像仓库来安装Docker。为此，我们将添加一个新的软件包源，从Docker添加GPG密钥以确保下载有效，然后安装该软件包。
 
-更新现有的软件包列表:
+1. 更新现有的软件包列表:
 
 ```
 $ sudo apt update
 ```
 
-安装apt-transport-https等软件包支持http协议的源:
+2. 安装apt-transport-https等软件包支持http协议的源:
 
 ```
 $ sudo apt install apt-transport-https ca-certificates curl software-properties-common
 ```
 
-添加Docker官方的gpg密钥到您的系统:
+3. 添加Docker官方的gpg密钥到您的系统:
 
 ```
 $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ```
 
-将Docker添加到apt源:
+4. 将Docker添加到apt源:
 
 ```
 $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
 ```
 
-再次更新apt软件包缓存:
+5. 再次更新apt软件包缓存:
 
 ```
 $ sudo apt update
 ```
 
-确保您要从Docker仓库而不是默认的Ubuntu仓库安装:
+6. 确保您要从Docker仓库而不是默认的Ubuntu仓库安装:
 
 ```
 $ apt-cache policy docker-ce
@@ -101,13 +101,13 @@ docker-ce:
 
 请注意，`docker-ce`未安装，但安装候选项来自Ubuntu16.04（`xenial`）的Docker仓库。
 
-安装Docker CE:
+7. 安装Docker CE:
 
 ```
 $ sudo apt install docker-ce
 ```
 
-此时，Docker安装已完成，守护进程已启动。通过`systemctl`命令来启动Docker服务，检查它是否正在运行:
+8. 此时，Docker安装已完成，守护进程已启动。通过`systemctl`命令来启动Docker服务，检查它是否正在运行:
 
 ```
 $ sudo systemctl status docker
@@ -140,13 +140,13 @@ docker: Cannot connect to the Docker daemon. Is the docker daemon running on thi
 See 'docker run --help'. 
 ```
 
-如果希望在每次运行`docker`命令时避免键入`sudo`，请将当前用户添加到安装中自动创建的**docker**用户组中:
+1. 如果希望在每次运行`docker`命令时避免键入`sudo`，请将当前用户添加到安装中自动创建的**docker**用户组中:
 
 ```
 $ sudo usermod -aG docker ${USER}
 ```
 
-要应用新的组成员身份，请注销服务器并重新登录，或键入以下命令:
+2. 要应用新的组成员身份，请注销服务器并重新登录，或键入以下命令:
 
 ```
 $ su - ${USER}
@@ -154,7 +154,7 @@ $ su - ${USER}
 
 系统将提示您输入用户密码以继续。
 
-通过键入以下命令确认您的用户现已添加到**docker**组:
+3. 通过键入以下命令确认您的用户现已添加到**docker**组:
 
 ```
 $ id -nG 
@@ -166,7 +166,7 @@ Output
 dc2-user docker
 ```
 
-如果您需要将用户添加到您未登录的**docker**组中，请使用以下方式输入确切的用户名:
+4. 如果您需要将用户添加到您未登录的**docker**组中，请使用以下方式输入确切的用户名:
 
 ```
 $ sudo usermod -aG docker username
@@ -178,13 +178,13 @@ $ sudo usermod -aG docker username
 
 ## 第3步 - 使用Docker命令
 
-使用`docker`命令，包括传递一系列选项和参数。语法采用以下形式:
+1. 使用`docker`命令，包括传递一系列选项和参数。语法采用以下形式:
 
 ```
 $ docker [option] [command] [arguments]
 ```
 
-要查看所有可用的子命令，请键入:
+2. 要查看所有可用的子命令，请键入:
 
 ```
 $ docker
@@ -272,7 +272,7 @@ wait         Block until one or more containers stop, then print their exit code
 Run 'docker COMMAND --help' for more information on a command.
 ```
 
-要查看特定命令的可用选项，请键入：
+3. 要查看特定命令的可用选项，请键入：
 
 ```
 $ docker docker-subcommand --help
@@ -290,13 +290,14 @@ $ docker info
 
 Docker容器是用Docker镜像创建的。默认情况下，Docker会尝试从默认镜像仓库（Docker Hub公共注册服务器中的仓库）获取这些镜像。Docker Hub是Docker项目背后的公司，任何人都可以在Docker Hub上托管他们的Docker镜像，您需要的大多数应用程序和Linux发行版都会有镜像托管在那里。
 
-要检查您是否可以从Docker Hub访问和下载镜像，请键入:
+1. 要检查您是否可以从Docker Hub访问和下载镜像，请键入:
 
 ```
 $ docker run hello-world
 ```
 
-输出将显示Docker正常工作：
+输出将显示Docker正常工作:
+
 ```
 Output
 
@@ -330,7 +331,7 @@ https://docs.docker.com/get-started/
 
 Docker最初无法在本地找到`hello-world`镜像，因此它从默认镜像仓库下载了镜像。下载镜像后，Docker用镜像创建了一个容器，并在容器中执行了应用程序，显示消息。
 
-您可以使用`docker`命令的`search`子命令搜索Docker Hub官方仓库中可用的镜像。例如，要搜索Ubuntu镜像，请键入:
+2. 您可以使用`docker`命令的`search`子命令搜索Docker Hub官方仓库中可用的镜像。例如，要搜索Ubuntu镜像，请键入:
 
 ```
 $ docker search ubuntu
@@ -371,7 +372,7 @@ pivotaldata/ubuntu-gpdb-dev                            Ubuntu images for GPDB de
 
 在**OFFICIAL**列中，**OK**表示由官方创建。确定要使用的镜像后，可以使用`pull`子命令将其拉取到本地。
 
-执行以下命令将官方`ubuntu`镜像拉取到您的计算机:
+3. 执行以下命令将官方`ubuntu`镜像拉取到您的计算机:
 
 ```
 $ docker pull ubuntu
@@ -394,7 +395,7 @@ Status: Downloaded newer image for ubuntu:latest
 
 拉取镜像后，可以使用`run`子命令用镜像创建并运行一个容器。正如您在`hello-world`示例中看到的，如果在执行`docker`命令的`run`子命令时未下载镜像，则Docker客户端将先下载镜像，然后使用它创建并运行容器。
 
-要查看已下载到本地的镜像，请键入:
+4. 要查看已下载到本地的镜像，请键入:
 
 ```
 $ docker images
@@ -411,7 +412,7 @@ hello-world         latest              4ab4c602aa5e        3 months ago        
 
 ```
 
-本文之后将介绍，用于运行容器的镜像可以被修改并用于生成新镜像，然后可以将其推送到Docker Hub或其他Docker注册服务器。
+后文将介绍，用于运行容器的镜像可以被修改并用于生成新镜像，然后可以将其推送到Docker Hub或其他Docker注册服务器。
 
 让我们更详细地来看看如何运行容器。
 
@@ -419,7 +420,7 @@ hello-world         latest              4ab4c602aa5e        3 months ago        
 
 在上一步中运行的`hello-world`容器是一个运行并在执行完命令后退出容器的例子。容器还有更多用处，它们是可交互的。毕竟它们类似于虚拟机，只是更加资源友好。
 
-举个例子，让我们使用Ubuntu的最新镜像运行一个容器。`-i`和`-t`选项的组合为您提供了对容器的交互式shell访问:
+1. 举个例子，让我们使用Ubuntu的最新镜像运行一个容器，`-i`和`-t`选项的组合为您提供了对容器的交互式shell访问:
 
 ```
 $ docker run -it ubuntu
@@ -667,7 +668,11 @@ unauthorized: authentication required
 
 滴滴云容器镜像服务是面向企业和开发者提供的容器镜像生命周期管理服务。容器镜像服务简化了镜像仓库的搭建运维工作，支持镜像托管、镜像安全扫描、镜像加速等功能，提供海量镜像资源，满足不同业务的需求。
 
-我们将使用滴滴云容器镜像服务创建自己的命名空间，再用上一步的方法推送镜像到
+我们将使用滴滴云容器镜像服务创建自己的命名空间，再推送镜像到该命名空间下。
+
+设置仓库账户
+
+第一次使用容器镜像服务时，需通过“我的仓库”页面的“设置仓库账户”按钮，来设置在Docker客户端登录时使用的用户名和密码，设置后不可更改用户名。也可先创建仓库再设置账户。
 
 ## 结论
 
