@@ -720,8 +720,5 @@ $ sudo docker push hub.didiyun.com/ns/py:latest
 您也可以通过点击“详情”按钮，对该镜像进行版本管理和安全扫描等操作:
 
 
-## 结论
-
-本文我们介绍了Docker的基础知识，安装了Docker、使用了镜像和容器，并将修改后的镜像推送到Docker Hub。
 
 作者:Lune
