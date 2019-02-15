@@ -280,7 +280,7 @@ Run 'docker COMMAND --help' for more information on a command.
 $ docker docker-subcommand --help
 ```
 
-要查看有关Docker的系统信息，请使用以下命令：
+4. 要查看有关Docker的系统信息，请使用以下命令：
 
 ```
 $ docker info
