@@ -1,10 +1,10 @@
-# 基于滴滴云安装Docker并推送镜像到滴滴云Docker仓库
+# 基于滴滴云安装Docker并上传镜像到滴滴云Docker仓库
 
 ## 前言
 
 Docker是一个应用程序，它简化了容器中应用程序进程的管理过程。容器允许您在资源隔离的进程中运行应用程序。容器与虚拟机类似，但容器更便携、更资源友好，并且更依赖于主机操作系统。
 
-本文将介绍，如何用滴滴云服务器在Ubuntu 16.04上安装和使用Docker Community Edition（CE），我们将安装Docker、使用镜像和容器，并将镜像推送到Docker仓库。目前，滴滴云提供了容器镜像服务，支持镜像托管、镜像安全扫描、镜像加速等功能，我们还将推送镜像到滴滴云Docker仓库。
+本文将介绍，如何用滴滴云服务器在Ubuntu 16.04上安装和使用Docker Community Edition（CE），我们将安装Docker、使用镜像和容器，并将镜像上传到Docker仓库。目前，滴滴云提供了容器镜像服务，支持镜像托管、镜像安全扫描、镜像加速等功能，我们还将上传镜像到滴滴云Docker仓库。
 
 ## 准备
 
@@ -435,7 +435,8 @@ root@c04385adddac:/#
 ```
 
 请注意命令提示符中的容器ID。在这个例子中，它是`c04385adddac`。稍后您将在要删除容器时用该容器ID来标识容器。
-现在您可以在容器内运行任何命令。例如，让我们更新容器内的apt软件包缓存。您不需要在任何命令前添加`sudo`，因为您是以**root**用户的身份在容器内操作:
+
+2. 现在您可以在容器内运行任何命令。例如，让我们更新容器内的apt软件包缓存。您不需要在任何命令前添加`sudo`，因为您是以**root**用户的身份在容器内操作:
 
 ```
 root@c04385adddac:/# apt update
@@ -469,7 +470,7 @@ v8.10.0
 
 ## 第6步 - 管理Docker容器
 
-使用Docker一段时间后，您的本地将有许多活动（运行）和非活动的容器。要查看活动的，请键入:
+1. 使用Docker一段时间后，您的本地将有许多活动（运行）和非活动的容器。要查看活动的，请键入:
 
 ```
 $ docker ps
@@ -485,7 +486,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED
 
 在本文中，您启动了两个容器：一个来自`hello-world`镜像，另一个来自`ubuntu`镜像。现在，两个容器都不再运行，但它们仍然存在于您的系统上。
 
-要查看所有容器（活动和非活动），请使用`docker ps`命令并添加`-a`选项:
+2. 要查看所有容器（活动和非活动），请使用`docker ps`命令并添加`-a`选项:
 
 ```
 $ docker ps -a
@@ -500,7 +501,7 @@ c04385adddac        ubuntu              "/bin/bash"         4 minutes ago       
 8f910927170e        hello-world         "/hello"            10 minutes ago      Exited (0) 10 minutes ago                           goofy_joliot
 ```
 
-要查看您创建的最新容器，请通过`-l`选项:
+3. 要查看您创建的最新容器，请通过`-l`选项:
 
 ```
 $ docker ps -l
@@ -513,7 +514,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 c04385adddac        ubuntu              "/bin/bash"         5 minutes ago       Exited (0) 2 minutes ago                            agitated_elion
 ```
 
-要启动已停止的容器，请使用`docker start`，后跟容器ID或容器名称。让我们启动基于Ubuntu的容器，其ID为`c04385adddac`:
+4. 要启动已停止的容器，请使用`docker start`，后跟容器ID或容器名称。让我们启动基于Ubuntu的容器，其ID为`c04385adddac`:
 
 ```
 $ docker start c04385adddac
@@ -522,25 +523,25 @@ $ docker start c04385adddac
 容器已启动，您可以使用`docker ps`来查看其状态:
 
 ```
-Outpiut
+Output
 
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                          PORTS               NAMES
 c04385adddac        ubuntu              "/bin/bash"         8 minutes ago       Up 53 seconds                                       agitated_elion
 ```
 
-要终止正在运行的容器，请使用`docker stop`，后跟容器ID或容器名称。这次，我们将使用Docker自动分配的容器名称来终止基于Ubuntu的容器，即`agitated_elion`:
+5. 要终止正在运行的容器，请使用`docker stop`，后跟容器ID或容器名称。这次，我们将使用Docker自动分配的容器名称来终止基于Ubuntu的容器，即`agitated_elion`:
 
 ```
 $ docker stop agitated_elion
 ```
 
-一旦您决定不再需要某个容器，请使用该`docker rm`命令将其删除，后跟容器ID或容器名称。我们将使用`docker ps -a`命令查看与`hello-world`镜像关联的容器的ID或名称，然后将其删除:
+6. 一旦您决定不再需要某个容器，请使用该`docker rm`命令将其删除，后跟容器ID或容器名称。我们将使用`docker ps -a`命令查看与`hello-world`镜像关联的容器的ID或名称，然后将其删除:
 
 ```
 $ docker rm goofy_joliot
 ```
 
-您可以通过`--name`选项启动一个新容器并为其命名。您还可以通过`--rm`选项创建一个容器，让其在停止时自行删除。有关这些选项和其他选项的更多信息，请使用`docker run help`命令查阅。
+7. 您可以通过`--name`选项启动一个新容器并为其命名。您还可以通过`--rm`选项创建一个容器，让其在停止时自行删除。有关这些选项和其他选项的更多信息，请使用`docker run help`命令查阅。
 
 我们还可以使用已有容器来创建镜像。让我们来看看是如何实现的。
 
@@ -552,7 +553,7 @@ $ docker rm goofy_joliot
 
 在Ubuntu容器中安装Node.js后，您有了一个正在运行镜像的容器，不过这个容器与用来创建它的镜像不同。但是您可能希望基于Node.js容器构建一个新镜像。
 
-使用以下命令来提交为一个新的Docker镜像。
+1. 使用以下命令来提交为一个新的Docker镜像:
 
 ```
 $ docker commit -m "What you did to the image" -a "Author Name" container_id repository/new_image_name
@@ -568,7 +569,7 @@ $ docker commit -m "added Node.js" -a "lune" c04385adddac lune/ubuntu-nodejs
 
 当您提交镜像后，新的镜像保存在本地。在本文后面，将介绍如何将镜像推送到Docker Hub之类的Docker注册服务器，以便其他人可以访问它。
 
-再次列出Docker镜像，将显示旧镜像以及从中派生的新镜像:
+2. 再次列出Docker镜像，将显示旧镜像以及从中派生的新镜像:
 
 ```
 $ docker images
@@ -591,13 +592,13 @@ hello-world          latest              4ab4c602aa5e        3 months ago       
 
 现在让我们看看如何与他人分享新镜像，以便他们可以用来创建容器。
 
-## 第8步 - 将Docker镜像推送到Docker仓库
+## 第8步 - 将Docker镜像上传到Docker仓库
 
-从现有镜像创建新镜像后，往往会想要共享到朋友、Docker Hub的所有用户，或者其他您可以访问的Docker注册服务器。要将镜像推送到Docker Hub或任何其他Docker注册服务器，您必须拥有一个它的帐户。
+从现有镜像创建新镜像后，往往会想要共享到朋友、Docker Hub的所有用户，或者其他您可以访问的Docker注册服务器。要将镜像上传到Docker Hub或任何其他Docker注册服务器，您必须拥有一个它的帐户。
 
-本步骤介绍如何将Docker镜像推送到Docker Hub。
+本步骤介绍如何将Docker镜像上传到Docker Hub。
 
-要推送镜像，请先登录Docker Hub:
+1. 登录Docker Hub:
 
 ```
 $ docker login -u docker-registry-username
@@ -611,25 +612,25 @@ $ docker login -u docker-registry-huyuyu
 
 系统将提示您使用Docker Hub密码进行身份验证。如果您输入了正确的密码，则身份验证成功。
 
-注意：如果Docker注册服务器用户名与用于创建镜像的本地用户名不同，则必须使用注册服务器用户名来标记镜像。基于上一步中给出的示例，您可以键入:
+2. 如果Docker注册服务器用户名与用于创建镜像的本地用户名不同，则必须使用注册服务器用户名来标记镜像。基于上一步中给出的示例，您可以键入:
 
 ```
 $ docker tag lune/ubuntu-nodejs huyuyu/ubuntu-nodejs
 ```
 
-然后您可以使用以下方法推送自己的镜像:
+3. 然后您可以使用以下方法上传自己的镜像:
 
 ```
 $ docker push docker-registry-username/docker-image-name
 ```
 
-要将`ubuntu-nodejs`镜像推送到`huyuyu`仓库，命令将是:
+要将`ubuntu-nodejs`镜像上传到`huyuyu`仓库，命令是:
 
 ```
 $ docker push huyuyu/ubuntu-nodejs
 ```
 
-推送镜像的过程可能需要一些时间才能完成，完成后的输出将如下所示:
+上传镜像的过程可能需要一些时间才能完成，完成后的输出将如下所示:
 
 ```
 Output
@@ -643,10 +644,10 @@ bc7f4b25d0ae: Mounted from library/ubuntu
 latest: digest: sha256:6f4aafc0500bc7065c11ba5aa7b0cf72f356a4121827867d7ab06632a6434c7d size: 1362
 ```
 
-将镜像推送到注册服务器后，它应该列在您帐户的仪表板上，如下图所示。
+4. 将镜像上传到注册服务器后，它应该列在您帐户的仪表板上，如下图所示。
 ![dockerhub-repositiry.png](https://github.com/luneyuyu/usedocker/blob/master/dockerhub-repositiry.png)
 
-如果推送尝试导致以下此类错误，那么您可能没有登录:
+5. 如果上传操作导致以下输出，那么您可能没有登录:
 
 ```
 Output
@@ -660,19 +661,64 @@ bc7f4b25d0ae: Preparing
 unauthorized: authentication required 
 ```
 
-登录`docker login`并重复推送尝试。然后验证它是否存在于Docker Hub仓库页面上。
+请登录`docker login`并重复尝试上传操作，然后验证它是否存在于Docker Hub仓库页面上。
 
-您现在可以将该镜像拉到新计算机并使用它来运行新容器`docker pull huyuyu/ubuntu-nodejs` 。
+您现在可以将该镜像拉取到新计算机并使用它来运行新容器`docker pull huyuyu/ubuntu-nodejs` 。
 
-## 第9步 - 推送镜像到滴滴云Docker仓库
+## 第9步 - 上传镜像到滴滴云Docker仓库
 
 滴滴云容器镜像服务是面向企业和开发者提供的容器镜像生命周期管理服务。容器镜像服务简化了镜像仓库的搭建运维工作，支持镜像托管、镜像安全扫描、镜像加速等功能，提供海量镜像资源，满足不同业务的需求。
 
-我们将使用滴滴云容器镜像服务创建自己的命名空间，再推送镜像到该命名空间下。
+我们将使用滴滴云容器镜像服务创建自己的命名空间，再上传镜像到该命名空间下。
 
-设置仓库账户
+1. 设置仓库账户
 
 第一次使用容器镜像服务时，需通过“我的仓库”页面的“设置仓库账户”按钮，来设置在Docker客户端登录时使用的用户名和密码，设置后不可更改用户名。也可先创建仓库再设置账户。
+
+2. 创建命名空间
+
+进入滴滴云控制台，依次点击计算—>容器镜像服务—>命名空间—>创建命名空间。命名空间名称在滴滴云容器镜像服务中全局唯一，用于生成仓库地址的前缀。命名空间也可以在第一次创建仓库时创建。（如果是滴滴云的团队账户，只有团队的管理员才能创建命名空间）
+
+3. 在Docker客户端登录
+
+在Docker客户端登录时的用户名和密码，是您在容器镜像服务控制台通过“设置仓库账户”按钮设置的用户名和密码。
+
+登录成功后，客户端会保存登录信息，下次登录该账户，无需输入密码即可自动登录。如需切换账户，必须重新按以下命令进行登录。
+
+```
+$ sudo docker login --username=*** hub.didiyun.com
+
+password：
+```
+
+4. 根据要上传的本地镜像的信息填写[镜像名称:Tag]或[镜像ID]，并填写对应的[命名空间]，以及用[仓库名称]和新的[版本号（Tag）]对它进行标记:
+
+```
+$ sudo docker tag [镜像名称：Tag]或[镜像ID] hub.didiyun.com/[命名空间]/[仓库名称]:[版本号（Tag）]
+```
+
+示例：
+
+```
+$ sudo docker tag python:3 hub.didiyun.com/ns/py:latest
+```
+
+5. 上传标记好的本地镜像到镜像仓库:
+
+```
+sudo docker push hub.didiyun.com/[命名空间]/[仓库名称]:[版本号（Tag）]
+```
+
+示例：
+
+```
+$ sudo docker push hub.didiyun.com/ns/py:latest
+```
+
+6. 完成上传后，在滴滴云容器镜像服务的“我的仓库”页面，查看该镜像:
+
+您也可以通过点击“详情”按钮，对该镜像进行版本管理和安全扫描等操作:
+
 
 ## 结论
 
