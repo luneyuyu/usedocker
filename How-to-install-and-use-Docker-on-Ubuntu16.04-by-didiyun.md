@@ -679,8 +679,6 @@ unauthorized: authentication required
 
 ![my-repo-empty.png](https://github.com/luneyuyu/usedocker/blob/master/my-repo-empty.png)
 
-![set-up-account.png](https://github.com/luneyuyu/usedocker/blob/master/set-up-account.png)
-
 也可先创建仓库再设置账户。
 
 2. 创建命名空间
@@ -692,8 +690,6 @@ unauthorized: authentication required
 命名空间也可以在第一次创建仓库时创建。（如果是滴滴云的团队账户，只有团队的管理员才能创建命名空间）
 
 ![namespace-empty.png](https://github.com/luneyuyu/usedocker/blob/master/namespace-empty.png)
-
-![create-namespace.png](https://github.com/luneyuyu/usedocker/blob/master/create-namespace.png)
 
 ![my-namespace.png](https://github.com/luneyuyu/usedocker/blob/master/my-namespace.png)
 
